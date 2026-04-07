@@ -1,0 +1,28 @@
+# ── Personal data (NEVER commit) ──────────────────────
+source/*.md
+!source/resume_example.md
+scripts/config.json
+.env
+
+# ── Generated output ──────────────────────────────────
+reports/
+
+# ── Python ────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# ── IDE / OS ──────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+.DS_Store

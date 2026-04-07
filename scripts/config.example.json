@@ -1,0 +1,143 @@
+{
+  "source_dir": "../source",
+  "resume_path": "../source/my_resume.md",
+  "output_dir": "../reports",
+  "target_start_date": "2026-07-15",
+
+  "search": {
+    "location": "Shanghai, China",
+    "locations": ["Shanghai, China", "Remote"],
+    "location_filter": ["Shanghai", "上海", "Remote", "Anywhere", "China"],
+    "exclude_title_keywords": [
+      "建筑", "工地", "幕墙", "装修", "精装", "土建", "施工", "造价",
+      "construction", "civil engineer", "architect",
+      "实习", "intern", "管培生", "trainee",
+      "工程维修", "物业"
+    ],
+    "max_age_days": 150,
+    "keywords": [
+      "project manager",
+      "program manager",
+      "PMO",
+      "technical program manager",
+      "engineering program manager",
+      "release manager",
+      "hardware program manager",
+      "silicon program manager"
+    ],
+    "extended_keywords": [
+      "AI product manager",
+      "product manager AI ML",
+      "solutions architect",
+      "technical solutions manager",
+      "digital transformation manager",
+      "release engineering manager",
+      "DevOps manager",
+      "quality engineering manager",
+      "QA director",
+      "technical account manager",
+      "AI infrastructure manager",
+      "platform engineering manager",
+      "SoC program manager",
+      "chip project manager",
+      "semiconductor program manager",
+      "infrastructure program manager",
+      "cloud infrastructure manager",
+      "validation engineering manager",
+      "NPI program manager"
+    ],
+    "max_results_per_keyword": 50
+  },
+
+  "matching": {
+    "min_score": 35,
+    "tfidf_weight": 30,
+    "keyword_weight": 1.0,
+    "priority_keywords": [
+      "technical program manager", "TPM", "engineering program manager",
+      "hardware", "firmware", "software", "system integration",
+      "HW/SW", "platform", "NPI", "product release",
+      "multi-site", "global", "cross-functional",
+      "agile", "scrum", "PMP", "PMO",
+      "AI", "automation", "digital transformation",
+      "product lifecycle", "release management", "risk management",
+      "stakeholder", "dependency", "cross-team", "program lifecycle",
+      "silicon", "SoC", "chip", "semiconductor", "tape-out", "bring-up",
+      "validation", "productization", "HCI", "hyper-converged",
+      "cloud infrastructure", "private cloud", "datacenter",
+      "GPU", "CPU", "accelerator", "ASIC"
+    ],
+    "preferred_companies": [
+      "Amazon", "Apple", "Meta", "Google", "Microsoft", "Oracle", "IBM", "SAP",
+      "AMD", "NVIDIA", "Intel", "Qualcomm", "Broadcom", "ASML", "NXP",
+      "Dell", "HP", "HPE", "Lenovo", "Cisco", "VMware",
+      "Tesla", "ByteDance", "字节跳动", "Alibaba", "阿里巴巴", "Tencent", "腾讯",
+      "Siemens", "Schneider Electric", "ABB", "Honeywell"
+    ],
+    "boost_title_keywords": [
+      "technical program manager", "engineering program manager",
+      "senior program manager", "principal program manager",
+      "senior project manager", "senior technical project manager",
+      "TPM", "PMO lead", "PMO manager", "PMO head", "PMO director",
+      "director program management", "director project management",
+      "release manager", "senior release manager",
+      "hardware program manager", "silicon program manager",
+      "infrastructure program manager"
+    ],
+    "extended_boost_title_keywords": [
+      "AI product manager", "product manager AI", "product manager ML",
+      "solutions architect", "solution architect", "technical solutions",
+      "digital transformation", "AI transformation",
+      "release engineering", "release manager",
+      "DevOps manager", "DevOps lead", "CI/CD",
+      "quality engineering manager", "QA manager", "QA director",
+      "technical account manager", "customer success manager",
+      "SoC program manager", "chip program manager",
+      "semiconductor program manager", "validation program manager",
+      "NPI program manager", "new product introduction",
+      "platform program manager", "cloud infrastructure program manager",
+      "AI infrastructure", "ML infrastructure"
+    ]
+  },
+
+  "jd_fetch": {
+    "enabled": true,
+    "min_score_to_fetch": 35,
+    "max_fetch": 30,
+    "request_delay_sec": 1.5
+  },
+
+  "email": {
+    "enabled": false,
+    "smtp_server": "smtp.163.com",
+    "smtp_port": 465,
+    "sender": "your_email@163.com",
+    "recipient": "your_email@163.com",
+    "password_env": "EMAIL_AUTH_CODE",
+    "subject_prefix": "[JobMatcher]"
+  },
+
+  "timeline": {
+    "target_start_date": "2026-07-15",
+    "onboarding_buffer_weeks": 4,
+    "company_hiring_weeks": {
+      "Amazon": [8, 11],
+      "Meta": [8, 11],
+      "Apple": [7, 11],
+      "Google": [8, 12],
+      "Microsoft": [7, 11],
+      "Morgan Stanley": [8, 12],
+      "AMD": [5, 8],
+      "NVIDIA": [5, 8],
+      "Intel": [6, 10],
+      "Qualcomm": [5, 9],
+      "Broadcom": [5, 9],
+      "ByteDance": [4, 7],
+      "Tesla": [5, 9],
+      "Alibaba": [4, 7],
+      "Baidu": [4, 7],
+      "Tencent": [4, 7],
+      "default": [5, 9]
+    }
+  }
+}
