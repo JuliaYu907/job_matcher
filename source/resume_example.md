@@ -1,44 +1,54 @@
 # Your Name
 
-**Email:** your_email@example.com | **Phone:** +86-1XXXXXXXXXX
+**Email:** your_email@example.com | **Phone:** +1-XXX-XXX-XXXX | **LinkedIn:** linkedin.com/in/yourprofile
+
+<!-- 
+  Resume Template for LinkedIn Job Matcher
+  =========================================
+  Tips:
+  - Use **bold** for key skills/achievements — the matcher extracts bold phrases for scoring
+  - Keep bullet points concise and results-oriented
+  - Include keywords from your target job descriptions
+  - You can create multiple versions (e.g. resume_pm.md, resume_dev.md) in the source/ folder
+    and the tool will match each job against all versions, keeping the best score
+-->
 
 ## Summary
 
-Senior Technical Program Manager with 10+ years of experience in cross-functional program delivery, system integration, and product lifecycle management. Expertise in HW/SW/FW coordination, agile methodologies, and global team leadership.
+Briefly describe your professional identity, years of experience, and core expertise. Example:
+
+> Experienced professional with X+ years in [your field]. Skilled in [key skill 1], [key skill 2], and [key skill 3]. Proven track record in [achievement area].
 
 ## Experience
 
-### **Senior Program Manager** — Company Name (2020 – Present)
-- Led cross-functional programs spanning 5+ engineering teams across 3 global sites
-- Managed end-to-end product lifecycle from concept to mass production
-- Established risk management framework reducing delivery delays by 30%
-- Drove agile transformation across the organization, improving sprint velocity by 25%
+### **Job Title** — Company Name (YYYY – Present)
+- Describe your key responsibility or achievement with measurable results
+- Led/managed/delivered [project/product] resulting in [quantifiable outcome]
+- Collaborated with [teams/stakeholders] to achieve [goal]
 
-### **Program Manager** — Previous Company (2015 – 2020)
-- Coordinated HW/SW/FW integration for enterprise platform products
-- Managed NPI (New Product Introduction) programs with $50M+ revenue impact
-- Built and maintained cross-team dependency tracking for 10+ concurrent projects
-- Implemented quality assurance processes aligned with ISO 9001 standards
+### **Job Title** — Company Name (YYYY – YYYY)
+- Describe your key responsibility or achievement
+- Built/implemented/designed [system/process] improving [metric] by [X%]
+- Managed [scope: team size, budget, geographic reach]
 
-### **Project Manager** — Earlier Company (2011 – 2015)
-- Delivered 15+ software releases on schedule with 99% quality targets met
-- Managed vendor relationships and third-party integration programs
-- Created PMO processes and templates adopted organization-wide
+### **Job Title** — Company Name (YYYY – YYYY)
+- Describe your key responsibility or achievement
+- Delivered [project] on time and within budget
+- Established [process/framework] adopted across the organization
 
 ## Education
 
-- **M.S. Computer Science** — University Name (2009 – 2011)
-- **B.S. Computer Science** — University Name (2005 – 2009)
+- **Degree, Major** — University Name (YYYY – YYYY)
+- **Degree, Major** — University Name (YYYY – YYYY)
 
 ## Certifications
 
-- PMP (Project Management Professional)
-- PMI-ACP (Agile Certified Practitioner)
-- Certified Scrum Master (CSM)
+- Certification Name (e.g. PMP, AWS Solutions Architect, CPA, etc.)
+- Certification Name
 
 ## Skills
 
-- **Program Management:** Agile, Scrum, Waterfall, SAFe, Risk Management, Stakeholder Management
-- **Technical:** System Integration, HW/SW/FW, NPI, Product Lifecycle, Release Management
-- **Tools:** JIRA, Confluence, MS Project, Smartsheet, Power BI
-- **Languages:** English (Fluent), Mandarin (Native)
+- **Domain Expertise:** List your core professional skills
+- **Technical Skills:** List tools, languages, frameworks, platforms you use
+- **Soft Skills:** Leadership, Communication, Stakeholder Management, etc.
+- **Languages:** English (Fluent), etc.
