@@ -139,5 +139,32 @@
       "Tencent": [4, 7],
       "default": [5, 9]
     }
+  },
+
+  "_comment_analysis": "Optional: override match analysis text. Omit this section to use built-in PM defaults.",
+  "analysis": {
+    "keyword_insights": {
+      "technical program manager": "TPM 职位与简历中的技术项目管理经验匹配",
+      "agile": "敏捷方法论与简历中的 Agile/Scrum 实践经验对标",
+      "AI": "AI 方向与简历中的人工智能相关经验契合"
+    },
+    "company_insights": {
+      "google": "Google 看重技术深度和规模化管理能力",
+      "amazon": "Amazon 看重 Leadership Principles 和跨团队协调"
+    },
+    "gap_patterns": [
+      {
+        "keywords": ["biotech", "pharmaceutical", "clinical trial"],
+        "gap": "生物医药行业经验可能缺失",
+        "suggestion": "强调项目管理方法论的可迁移性"
+      },
+      {
+        "keywords": ["director", "vp ", "vice president"],
+        "gap": "向上拓展到 Director/VP 级别",
+        "suggestion": "强调团队管理幅度和组织影响力"
+      }
+    ],
+    "fallback_strength": "核心专业能力可迁移",
+    "no_title_hit_gap": "⚠️ 职位标题未直接命中目标关键词——投递时在 Cover Letter 中明确对标相关经验"
   }
 }

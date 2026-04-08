@@ -479,8 +479,8 @@ def score_job(job: dict, resume: dict, matcher: SemanticMatcher, config: dict,
 # ---------------------------------------------------------------------------
 # Match analysis generator (strengths + gaps)
 # ---------------------------------------------------------------------------
-# Maps keyword hits → generic resume talking points
-_KW_TO_RESUME = {
+# Default analysis data (PM-oriented). Override via config["analysis"].
+_DEFAULT_KW_INSIGHTS = {
     "technical program manager": "TPM 职位与简历中的技术项目管理经验匹配",
     "TPM": "TPM 核心角色，与简历中的 TPM 经验对标",
     "engineering program manager": "Engineering PM 与简历中的工程项目管理经验一致",
@@ -511,7 +511,7 @@ _KW_TO_RESUME = {
     "program lifecycle": "项目全生命周期管理与简历中的 E2E 交付经验对标",
 }
 
-_COMPANY_INSIGHTS = {
+_DEFAULT_COMPANY_INSIGHTS = {
     "nvidia": "NVIDIA 重视系统集成和 AI 领域 PM，技术深度是关键加分项",
     "amd": "半导体行业对 HW/FW 集成和多代产品管理经验需求强烈",
     "amazon": "Amazon TPM 看重强技术背景 + 跨团队协调 + Leadership Principles",
@@ -531,50 +531,69 @@ _COMPANY_INSIGHTS = {
     "qualcomm": "芯片公司对 HW 平台 PM 的需求持续旺盛",
 }
 
-# Industry / domain gap patterns: (JD keyword → gap insight + suggestion)
-# NOTE: Use specific phrases to avoid false positives from generic JD language
-_GAP_PATTERNS = [
-    # Automotive
+# (JD keywords, gap description, suggestion)
+_DEFAULT_GAP_PATTERNS = [
     (["automotive", "autonomous driving", "adas", "av software", "electric vehicle", "ev platform"],
      "汽车/自动驾驶行业可能非核心领域",
      "投递时突出项目管理方法论的可迁移性，强调跨系统集成和测试经验"),
-    # Semiconductor chip design
     (["tapeout", "foundry", "wafer", "silicon validation", "chip design", "rtl", "asic design"],
      "芯片设计/流片流程可能不是直接经验",
      "简历中强调硬件平台和系统集成经验来类比芯片产品化流程"),
-    # Biotech / Pharma / Medical
     (["biotech", "pharmaceutical", "clinical trial", "drug development", "gmp", "fda approval", "medical device", "生物制药", "临床"],
      "生物医药/医疗器械行业经验可能缺失",
      "强调大型 R&D 项目管理方法论的可迁移性和质量管理经验"),
-    # Finance industry (not financial skills)
     (["investment bank", "trading system", "capital market", "hedge fund", "asset management", "wealth management"],
      "金融行业背景可能不足",
      "突出技术深度和复杂系统项目管理经验，强调技术 + 管理双重能力"),
-    # Energy / Oil & Gas
     (["oil and gas", "petroleum", "upstream", "downstream", "lubricant", "drilling", "refinery"],
      "能源行业经验可能有限",
      "强调大型跨职能项目交付能力和 PMP 方法论的行业通用性"),
-    # Director / VP level
     (["director", "vp ", "vice president"],
      "向上拓展到 Director/VP 级别",
      "准备 Director 级叙事——强调团队管理幅度、项目规模和组织影响力"),
-    # Head of (separate from Director for title-level check)
     (["head of project", "head of program", "head of pmo"],
      "向上拓展到部门负责人级别",
      "强调管理幅度和项目统筹规模，突出组织影响力和战略思维"),
-    # Manufacturing focused
     (["production line", "lean manufacturing", "six sigma", "shop floor", "factory automation"],
      "制造/工厂运营可能非日常经验",
      "突出 NPI 量产导入经验和质量管理背景，将产品化经验类比制造流程"),
-    # Pure software / cloud
     (["microservice", "kubernetes", "devops", "cloud native", "saas platform", "backend engineer"],
      "纯软件/云原生技术栈可能非核心技能",
      "强调技术背景和自动化能力，突出方法论转型和学习能力"),
-    # Management consulting
     (["consulting firm", "management consulting", "advisory firm"],
      "咨询行业工作模式不同于甲方",
      "强调跨职能领导力和流程改进方法论，这些在咨询场景中是核心卖点"),
 ]
+
+_DEFAULT_FALLBACK_STRENGTH = "核心专业能力可迁移"
+_DEFAULT_NO_TITLE_HIT_GAP = "⚠️ 职位标题未直接命中目标关键词——投递时在 Cover Letter 中明确对标相关经验"
+
+
+def _load_analysis_config(config: dict) -> dict:
+    """Load analysis settings from config, falling back to built-in defaults."""
+    analysis = config.get("analysis", {})
+    kw_insights = analysis.get("keyword_insights", _DEFAULT_KW_INSIGHTS)
+    company_insights = analysis.get("company_insights", _DEFAULT_COMPANY_INSIGHTS)
+
+    # gap_patterns: config uses list-of-dicts for JSON compatibility
+    gap_patterns_raw = analysis.get("gap_patterns")
+    if gap_patterns_raw:
+        gap_patterns = [
+            (g["keywords"], g["gap"], g["suggestion"]) for g in gap_patterns_raw
+        ]
+    else:
+        gap_patterns = _DEFAULT_GAP_PATTERNS
+
+    fallback_strength = analysis.get("fallback_strength", _DEFAULT_FALLBACK_STRENGTH)
+    no_title_hit_gap = analysis.get("no_title_hit_gap", _DEFAULT_NO_TITLE_HIT_GAP)
+
+    return {
+        "kw_insights": kw_insights,
+        "company_insights": company_insights,
+        "gap_patterns": gap_patterns,
+        "fallback_strength": fallback_strength,
+        "no_title_hit_gap": no_title_hit_gap,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -775,8 +794,13 @@ _PIPELINE_CATEGORY_ORDER = [
 ]
 
 
-def generate_match_summary(job: dict) -> str:
+def generate_match_summary(job: dict, config: dict) -> str:
     """Generate match analysis: strengths + gaps + improvement suggestions."""
+    ac = _load_analysis_config(config)
+    kw_insights = ac["kw_insights"]
+    company_insights = ac["company_insights"]
+    gap_patterns = ac["gap_patterns"]
+
     bd = job.get("score_breakdown", {})
     company = job["company"].lower()
     title_lower = job["title"].lower()
@@ -789,19 +813,19 @@ def generate_match_summary(job: dict) -> str:
     strength_parts = []
 
     if title_hit:
-        resume_point = _KW_TO_RESUME.get(title_hit, "")
+        resume_point = kw_insights.get(title_hit, "")
         if resume_point:
             strength_parts.append(resume_point)
 
-    for co_key, insight in _COMPANY_INSIGHTS.items():
+    for co_key, insight in company_insights.items():
         if co_key in company:
             strength_parts.append(insight)
             break
 
     remaining_kws = [k for k in kw_hits if k != title_hit]
     for kw in remaining_kws:
-        if kw in _KW_TO_RESUME and len(strength_parts) < 3:
-            strength_parts.append(_KW_TO_RESUME[kw])
+        if kw in kw_insights and len(strength_parts) < 3:
+            strength_parts.append(kw_insights[kw])
 
     if not strength_parts:
         seniority_hit = bd.get("seniority_hit", "")
@@ -810,13 +834,13 @@ def generate_match_summary(job: dict) -> str:
         if kw_hits:
             strength_parts.append(f"关键词 {', '.join(kw_hits[:3])} 与简历核心能力对齐")
         if not strength_parts:
-            strength_parts.append("核心 PM 管理能力可迁移")
+            strength_parts.append(ac["fallback_strength"])
 
     strengths = "。".join(strength_parts[:2])
 
     # --- Gaps & suggestions (scan JD for mismatch patterns) ---
     gap_text = ""
-    for keywords, gap_desc, suggestion in _GAP_PATTERNS:
+    for keywords, gap_desc, suggestion in gap_patterns:
         for kw in keywords:
             # Use word-boundary matching to avoid false positives like "social" → "soc"
             if re.search(r'\b' + re.escape(kw) + r'\b', scan_text):
@@ -828,7 +852,7 @@ def generate_match_summary(job: dict) -> str:
     # Additional gap checks based on score dimensions
     if not gap_text:
         if not bd.get("title_hit"):
-            gap_text = "⚠️ 职位标题未直接命中 TPM/Program Manager——投递时在 Cover Letter 中明确对标 PM 经验"
+            gap_text = ac["no_title_hit_gap"]
         elif bd.get("tfidf_raw", 0) < 0.05:
             gap_text = "⚠️ JD 内容与简历语义重合度偏低——建议仔细研读 JD 后在简历中补充对应关键词"
         elif not bd.get("company_hit"):
@@ -1146,7 +1170,7 @@ def generate_report(matched_jobs: list[dict], config: dict) -> str:
                 title = f"[{j['title']}]({j['link']})"
             urgency = get_apply_urgency(j["company"], config)
             status_tag = f" `{j['status']}`" if j.get("status") else ""
-            analysis = generate_match_summary(j)
+            analysis = generate_match_summary(j, config)
             if has_resume_col:
                 best_r = j.get("best_resume", "").replace("_", " ")
                 lines.append(
@@ -1589,7 +1613,7 @@ def generate_extended_match_report(matched_jobs: list[dict], all_jobs: list[dict
                 title = f"[{j['title']}]({j['link']})"
             urgency = get_apply_urgency(j["company"], config)
             status_tag = f" `{j['status']}`" if j.get("status") else ""
-            analysis = generate_match_summary(j)
+            analysis = generate_match_summary(j, config)
             direction = _EXTENDED_DIRECTIONS.get(j.get("keyword", ""), j.get("keyword", ""))
             if has_resume_col:
                 best_r = j.get("best_resume", "").replace("_", " ")

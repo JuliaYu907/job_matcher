@@ -57,6 +57,46 @@ cp scripts/config.example.json scripts/config.json
 | `matching.preferred_companies` | 偏好公司列表（命中加分） |
 | `timeline.target_start_date` | 目标入职日期 |
 | `email.*` | 邮件发送配置（可选） |
+| `analysis.*` | 匹配分析文案（可选，见下文） |
+
+#### Customizing Match Analysis (Optional)
+
+报告中每个职位的"匹配分析"文案默认面向 PM 岗位。如果你的目标岗位不同，可以在 config 中添加 `analysis` 来覆盖：
+
+```json
+{
+  "analysis": {
+    "keyword_insights": {
+      "data scientist": "数据科学职位与简历中的数据分析和建模经验匹配",
+      "machine learning": "ML 方向与简历中的机器学习项目经验对标",
+      "python": "Python 技术栈与简历中的编程经验一致"
+    },
+    "company_insights": {
+      "google": "Google 重视算法能力和大规模数据处理经验",
+      "bytedance": "字节跳动推荐算法团队对 ML 工程能力要求高"
+    },
+    "gap_patterns": [
+      {
+        "keywords": ["biotech", "pharmaceutical"],
+        "gap": "生物医药行业经验可能缺失",
+        "suggestion": "强调数据分析方法论的跨行业可迁移性"
+      }
+    ],
+    "fallback_strength": "核心数据分析能力可迁移",
+    "no_title_hit_gap": "⚠️ 职位标题未直接命中目标关键词——投递时在 Cover Letter 中明确对标相关经验"
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `keyword_insights` | 关键词 → 匹配说明。key 应与 `priority_keywords` 中的词对应 |
+| `company_insights` | 公司名(小写) → 公司特点分析 |
+| `gap_patterns` | 行业差距识别：JD 中出现这些关键词时提示可能的短板和建议 |
+| `fallback_strength` | 当没有任何关键词命中时的兜底文案 |
+| `no_title_hit_gap` | 当职位标题未命中 boost 关键词时的提示文案 |
+
+所有字段均为可选——省略整个 `analysis` 则使用内置的 PM 默认文案。
 
 ### 4. Run
 
